@@ -30,3 +30,19 @@ countsByAge.show()
 // Saves countsByAge to S3 in the JSON format.
 countsByAge.write.format("json").save("s3a://...")
 
+val df = sqlContext.createDataFrame(data).toDF("label", "features")
+
+// Set parameters for the algorithm.
+// Here, we limit the number of iterations to 10.
+val lr = new LogisticRegression().setMaxIter(10)
+
+// Fit the model to the data.
+val model = lr.fit(df)
+
+// Inspect the model: get the feature weights.
+val weights = model.weights
+
+// Given a dataset, predict each point's label, and show the results.
+model.transform(df).show()
+
+
